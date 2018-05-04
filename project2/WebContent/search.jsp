@@ -150,7 +150,7 @@
 
 
 <table border>
-<tr><td>ID</td><td >Title</td><td>Year</td><td>Director</td><td>Rating</td><td>Genres</td><td>Stars</td></tr>
+<tr><td >Title</td><td>Year</td><td>Director</td><td>Rating</td><td>Genres</td><td>Stars</td></tr>
 
 <% while (resultSet.next()) { 
 	System.out.println("Enter the resultSet");
@@ -190,8 +190,7 @@
 	
 %>
 <tr>
-<td> <%= movieId %> </td>
-<td> <%= movie_title %> </td>
+<td>  <a href="MoviePage.jsp?movieId=<%=movieId %>"><%= movie_title %></a> </td>
 <td> <%= movie_year %> </td>
 <td> <%= movie_director %> </td>
 <td> <%= movie_rating %> </td>
