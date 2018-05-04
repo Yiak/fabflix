@@ -1,6 +1,8 @@
 <%@page import="java.sql.*" %>
 <%@ page import ="java.util.ArrayList"%>
 <%@ page import ="java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 
 <%-- these statements are just normal Java code, they need to be inside the <% %> brackets--%>
 <%
@@ -19,14 +21,20 @@
 	String year=request.getParameter("year");
 	String director=request.getParameter("director");
 	String star_name=request.getParameter("star_name");
+	String browse_type=request.getParameter("browse_type");
+	String browse_genre=request.getParameter("browse_genre");
 	int number_per_page=Integer.parseInt(request.getParameter("number_per_page"));
 	int start_from=Integer.parseInt(request.getParameter("start_from"));
 	String sorted_by=request.getParameter("sorted_by");
 
+	System.out.println("Now sorted_by is:"+sorted_by);
+	if(sorted_by==null){
+		sorted_by="m.title";
+	}
 	
 	if(sorted_by.equals("rating")) {
 		sorted_by="r.rating desc";
-	}else {
+	}else if(sorted_by.equals("title")){
 		sorted_by="m.title";
 	}
 
@@ -42,22 +50,54 @@
 	if(star_name==null) {
 		star_name="";
 	}
-	if(start_from<0){
-		start_from=0;
+
+	if(start_from<1){
+		start_from=1;
 	}
 	
-	String query="select m.id from movies as m, "
-			+ "(select distinct sm.movieId  from stars_in_movies as sm, stars as s "
-			+ "where s.name like \"%"+star_name+"%\" and s.id=sm.starId) as nm, ratings as r "
-			+ "where m.title LIKE \"%"+title+"%\"  "
-			+ "and m.year Like \"%"+year+"%\" "
-			+ "and m.director Like \"%"+director+"%\" "
-			+ "and nm.movieid=m.id and r.movieId= m.id "
-			+ "order by "+sorted_by+" "
-			+ "limit "+number_per_page+" "
-			+ "offset "+start_from*number_per_page+";";
+	String query="empty";
 	
-	query=query+";";
+	if(browse_type==null || browse_type.equals("")){
+		
+		query="select m.id from movies as m, "
+				+ "(select distinct sm.movieId  from stars_in_movies as sm, stars as s "
+				+ "where s.name like \"%"+star_name+"%\" and s.id=sm.starId) as nm, ratings as r "
+				+ "where m.title LIKE \"%"+title+"%\"  "
+				+ "and m.year Like \"%"+year+"%\" "
+				+ "and m.director Like \"%"+director+"%\" "
+				+ "and nm.movieid=m.id and r.movieId= m.id "
+				+ "order by "+sorted_by+" "
+				+ "limit "+number_per_page+" "
+				+ "offset "+(start_from-1)*number_per_page+";";
+		
+		/***		
+		query="select m.id from (select m.id,m.title from movies as m, "
+				+ "(select distinct sm.movieId  from stars_in_movies as sm, stars as s "
+				+ "where s.name like \"%"+star_name+"%\" and s.id=sm.starId) as nm "
+				+ "where m.title LIKE \"%"+title+"%\" "
+				+ "and m.year Like \"%"+year+"%\"  "
+				+ "and m.director Like \"%"+director+"%\"  "
+				+ "and nm.movieid=m.id) as m left join ratings as r on r.movieId=m.id "
+				+ "order by "+sorted_by+" "
+				+ "limit "+number_per_page+" "
+				+ "offset "+(start_from-1)*number_per_page+";";
+		***/
+		
+	}else if(browse_type.equals("a")){
+		
+		query="select m.id from movies as m , ratings as r where m.title LIKE \""+title+"%\" and r.movieId=m.id"
+				+ " order by "+sorted_by+" "
+				+ "limit "+number_per_page+" "
+				+ "offset "+(start_from-1)*number_per_page+";";
+	}else if(browse_type.equals("g")){
+		query="select m.id ,m.title,g.name from movies as m, ratings as r, genres as g, genres_in_movies as gm "
+				+ "where g.name=\""+browse_genre+"\" and g.id=gm.genreId and gm.movieId=m.id and m.id=r.movieId "
+				+ "order by "+sorted_by+" "
+				+ "limit "+number_per_page+" "
+				+ "offset "+(start_from-1)*number_per_page+";";
+	}
+	
+	
 	ResultSet resultSet = statement.executeQuery(query);
 	ResultSetMetaData metadata = resultSet.getMetaData();
 	
@@ -76,16 +116,21 @@
 --%>
 
 <html>
-<head><title>Fabflix</title><link rel='stylesheet' href='style.css'></head>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Fabflix</title><link rel='stylesheet' href='style.css'>
+</head>
 <body>
 <form id="inside_search_form" method="get" action="search.jsp">
     <input type="hidden" name="title" value="<%=title %>" />
     <input type="hidden" name="year" value="<%=year %>" />
     <input type="hidden" name="director" value="<%=director %>" />
     <input type="hidden" name="star_name" value="<%=star_name %>" />
+    <input type="hidden" name="browse_type" value="<%=browse_type %>" />
+    <input type="hidden" name="browse_genre" value="<%=browse_genre %>" />
     <label><b>Current page is: <%=start_from %></b></label>
     <label><b>Jump to Page</b></label>
-    <input type="text" name="start_from" value="0" />
+    <input type="text" name="start_from" value="1" />
     <label><b>Results per page</b></label>
     <input type="text" name="number_per_page" value="20" />
     <label><b>Sorted by</b></label>
@@ -97,18 +142,18 @@
 </form>
 
 
-<a href="search.jsp?$title=<%=title %>&year=<%=year %>&director=<%=director %>&star_name=<%=star_name %>&number_per_page=<%=number_per_page %>&start_from=<%=start_from-1 %>&sorted_by=<%=sorted_by %>">
+<a href="search.jsp?title=<%=title %>&year=<%=year %>&director=<%=director %>&star_name=<%=star_name %>&number_per_page=<%=number_per_page %>&start_from=<%=start_from-1 %>&sorted_by=<%=sorted_by %>&browse_type=<%=browse_type %>&browse_genre=<%=browse_genre %>">
 <button>Previous</button></a>
 
-<a href="search.jsp?$title=<%=title %>&year=<%=year %>&director=<%=director %>&star_name=<%=star_name %>&number_per_page=<%=number_per_page %>&start_from=<%=start_from+1 %>&sorted_by=<%=sorted_by %>">
+<a href="search.jsp?title=<%=title %>&year=<%=year %>&director=<%=director %>&star_name=<%=star_name %>&number_per_page=<%=number_per_page %>&start_from=<%=start_from+1 %>&sorted_by=<%=sorted_by %>&browse_type=<%=browse_type %>&browse_genre=<%=browse_genre %>">
 <button>Next</button></a>
 
 
 <table border>
-<tr><td >Title</td><td>Year</td><td>Director</td><td>Rating</td><td>Genres</td><td>Stars</td></tr>
+<tr><td>ID</td><td >Title</td><td>Year</td><td>Director</td><td>Rating</td><td>Genres</td><td>Stars</td></tr>
 
 <% while (resultSet.next()) { 
-	System.out.println("check");
+	System.out.println("Enter the resultSet");
 	String movieId = resultSet.getString("id");
 	System.out.println("Now movieId is:"+movieId);
 	String movieQuery="select m.title,m.year,m.director,r.rating from movies as m, ratings as r where m.id=\""+movieId+"\" and r.movieId=m.id;";
@@ -126,6 +171,9 @@
 		movie_rating=movieResult.getString("rating");
 	}
 	
+	if(movie_title.equals("")){
+		continue;
+	}
 	String genresQuery="select g.name from genres as g, genres_in_movies as gm where gm.movieId=\""+movieId+"\" and gm.genreId=g.id;";
 	ResultSet genresResult = temp_statement.executeQuery(genresQuery);
 	ArrayList<String> genres = new ArrayList();
@@ -142,10 +190,21 @@
 	
 %>
 <tr>
+<td> <%= movieId %> </td>
 <td> <%= movie_title %> </td>
 <td> <%= movie_year %> </td>
 <td> <%= movie_director %> </td>
 <td> <%= movie_rating %> </td>
+<td>
+<% for (String g:genres){  %>
+<label><%= g %></label><br />
+<%} %>
+</td>
+<td>
+<% for (String s:stars){  %>
+<label><%= s %>,</label><br />
+<%} %>
+</td>
 </tr>
 <% } %>
 </table>
