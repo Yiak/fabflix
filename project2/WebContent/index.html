@@ -1,16 +1,105 @@
 <!-- This page will be seen if you logged in -->
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Fablix</title>
     <link rel='stylesheet' href='style.css'>
     <link rel="import" href='header.html'>
     
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style>
+#sddm
+{	margin: 0 auto;
+	padding: 0;
+	z-index: 30;
+	background-color:#F4F4F4;
+	width: 405px;
+	height:23px;}
+
+#sddm li
+{	margin: 0;
+	padding: 0;
+	list-style: none;
+	float: left;
+	font: bold 12px arial}
+
+#sddm li a
+{	display: block;
+	margin: 0 1px 0 0;
+	padding: 4px 10px;
+	width: 60px;
+	background: #5970B2;
+	color: #FFF;
+	text-align: center;
+	text-decoration: none}
+
+#sddm li a:hover
+{	background: #49A3FF}
+
+#sddm div
+{	position: absolute;
+	visibility: hidden;
+	margin: 0;
+	padding: 0;
+	background: #EAEBD8;
+	border: 1px solid #5970B2}
+
+	#sddm div a
+	{	position: relative;
+		display: block;
+		margin: 0;
+		padding: 5px 10px;
+		width: auto;
+		white-space: nowrap;
+		text-align: left;
+		text-decoration: none;
+		background: #EAEBD8;
+		color: #2875DE;
+		font: 12px arial}
+
+	#sddm div a:hover
+	{	background: #49A3FF;
+		color: #FFF}
+</style>
+
+<script type="text/javascript">
+<!--
+var timeout         = 500;
+var closetimer		= 0;
+var ddmenuitem      = 0;
+
+
+</script>
 </head>
-<body>
+
+<body style="text-align:center">
+
 <div align="center">
-<IFRAME NAME="content_frame" width=405 height=23 marginwidth=0 marginheight=0 SRC="header.html" ></IFRAME>
+<ul id="sddm">
+	<li><a href="index.html" onmouseover="mopen('m1')" onmouseout="mclosetime()">Home</a>
+		<div id="m1" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+		</div>
+	</li>
+	<li><a href="SearchPage.jsp" onmouseover="mopen('m2')" onmouseout="mclosetime()">Search</a>
+		<div id="m2" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">			
+		</div>
+	</li>
+	<li><a href="BrowsePage.jsp" onmouseover="mopen('m3')" onmouseout="mclosetime()">Browse</a>
+		<div id="m3" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">		
+		</div>
+	</li>
+	<li><a href="#" onmouseover="mopen('m4')" onmouseout="mclosetime()">Help</a>
+		<div id="m4" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">	
+		</div>
+	</li>
+	<li><a href="shoppingcart.jsp" onmouseover="mopen('m5')" onmouseout="mclosetime()">Checkout</a>
+		<div id="m5" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+		</div>
+	</li>
+</ul>
+<div style="clear:both"></div>
 </div >
 <h1>Welcome to Fablix!</h1>
 <br />

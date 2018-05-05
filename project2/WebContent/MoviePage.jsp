@@ -98,6 +98,12 @@
 <%} %>
 </td>
 </tr>
+<tr>
+<td  ><a href="SearchPage.jsp?">
+<button>Back to Search</button></a></td>
+<td  ><a href="shoppingcart.jsp?movieId=<%=movieId %>&q=233">
+<button>Add to the cart</button></a></td>
+</tr>
 </table>
 </div>
 </body>

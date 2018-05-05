@@ -153,7 +153,7 @@
 <br />
 <div>
 <table border>
-<tr><td >Title</td><td>Year</td><td>Director</td><td>Rating</td><td>Genres</td><td>Stars</td></tr>
+<tr><td >Title</td><td>Year</td><td>Director</td><td>Rating</td><td>Genres</td><td>Stars</td><td>Add to cart</td></tr>
 
 <% while (resultSet.next()) { 
 	System.out.println("Enter the resultSet");
@@ -207,6 +207,9 @@
 <a href="StarPage.jsp?star_name=<%=s%>"><label><%= s %></label></a><br />
 <%} %>
 </td>
+<td>
+<a href="shoppingcart.jsp?movieId=<%=movieId %>&q=233">
+<button>Add to the cart</button></a></td>
 </tr>
 <% } %>
 </table>
