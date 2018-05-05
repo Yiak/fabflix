@@ -63,6 +63,7 @@
 <link rel='stylesheet' href='style.css'>
 </head>
 <body>
+<%@ include file="header.html"%>
 <div>
 <h1>Movie Information</h1>
 <table border>
@@ -85,7 +86,7 @@
 <td>Genres</td>
 <td>
 <% for (String g:genres){  %>
-<a href="search.jsp?browse_genre=<%=g%>&browse_type=g&start_from=1&number_per_page=20"><label><%= g %></label><br />
+<a href="search.jsp?browse_genre=<%=g%>&browse_type=g&start_from=1&number_per_page=20"><label><%= g %></label></a><br />
 <%} %>
 </td>
 </tr>
@@ -93,7 +94,7 @@
 <td>Stars</td>
 <td>
 <% for (String s:stars){  %>
-<a href="StarPage.jsp?star_name=<%=s%>"><label><%= s %></label><br />
+<a href="StarPage.jsp?star_name=<%=s%>"><label><%= s %></label></a><br />
 <%} %>
 </td>
 </tr>

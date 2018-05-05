@@ -121,6 +121,8 @@
 <title>Fabflix</title><link rel='stylesheet' href='style.css'>
 </head>
 <body>
+<%@ include file="header.html"%>
+<div>
 <form id="inside_search_form" method="get" action="search.jsp">
     <input type="hidden" name="title" value="<%=title %>" />
     <input type="hidden" name="year" value="<%=year %>" />
@@ -147,8 +149,9 @@
 
 <a href="search.jsp?title=<%=title %>&year=<%=year %>&director=<%=director %>&star_name=<%=star_name %>&number_per_page=<%=number_per_page %>&start_from=<%=start_from+1 %>&sorted_by=<%=sorted_by %>&browse_type=<%=browse_type %>&browse_genre=<%=browse_genre %>">
 <button>Next</button></a>
-
-
+</div>
+<br />
+<div>
 <table border>
 <tr><td >Title</td><td>Year</td><td>Director</td><td>Rating</td><td>Genres</td><td>Stars</td></tr>
 
@@ -190,23 +193,24 @@
 	
 %>
 <tr>
-<td>  <a href="MoviePage.jsp?movieId=<%=movieId %>"><%= movie_title %></a> </td>
+<td>  <a href="MoviePage.jsp?movieId=<%=movieId %>"><label><%= movie_title %></label></a> </td>
 <td> <%= movie_year %> </td>
 <td> <%= movie_director %> </td>
 <td> <%= movie_rating %> </td>
 <td>
 <% for (String g:genres){  %>
-<label><%= g %></label><br />
+<a href="search.jsp?browse_genre=<%= g %>&browse_type=g&start_from=1&number_per_page=20"><label><%= g %></label></a><br />
 <%} %>
 </td>
 <td>
 <% for (String s:stars){  %>
-<label><%= s %>,</label><br />
+<a href="StarPage.jsp?star_name=<%=s%>"><label><%= s %></label></a><br />
 <%} %>
 </td>
 </tr>
 <% } %>
 </table>
+</div>
 </body>
 
 

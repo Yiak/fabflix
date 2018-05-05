@@ -8,8 +8,14 @@ table, th, td
   text-align:center;
   font-family:Tahoma;
   
+  
   }
   
+  td, th{
+  text-overflow:ellipsis;
+  word-break:keep-all; 
+  white-space:nowrap;
+  }  
   
 button{
 	
@@ -46,3 +52,21 @@ button{
  }
 
  body{background: #D6E9FC}
+ 
+ a{
+    font-family:Arial;
+    font-size:.8em;
+    text-align:center;
+    margin:3px;
+}
+a:link,a:visited{
+    color:#A62020;
+    padding:4px 10px;　
+    
+}
+a:hover{
+    color:#773575;
+    padding:5px 8px 3px 12px;　　
+
+}
+ 

@@ -2,9 +2,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Search</title>
+<link rel='stylesheet' href='style.css'>
 </head>
 <body>
+<%@ include file="header.html"%>
 <form id="search_form" method="get" action="search.jsp">
     <label><b>Title</b></label>
     <br />

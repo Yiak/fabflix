@@ -54,6 +54,7 @@
 <link rel='stylesheet' href='style.css'>
 </head>
 <body>
+<%@ include file="header.html"%>
 <div>
 <h1>Star Information</h1>
 <table border>
@@ -68,7 +69,7 @@
 <td>Movies</td>
 <td>
 <% for (int i=0;i<movies_name.size();++i){  %>
-<a href="MoviePage.jsp?movieId=<%=movies_id.get(i)%>"><label><%= movies_name.get(i) %></label><br />
+<a href="MoviePage.jsp?movieId=<%=movies_id.get(i)%>"><label><%= movies_name.get(i) %></label></a><br />
 <%} %>
 </td>
 </tr>
