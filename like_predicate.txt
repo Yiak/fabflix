@@ -1,0 +1,5 @@
+We use 
+
+title LIKE "%PATTERN%" 
+
+to predicate any possiable query which means we will generate the result as long as PATTERN is the part of the whole String.
