@@ -78,7 +78,7 @@
 				+ "and m.year Like ?  "
 				+ "and m.director Like ?  "
 				+ "and nm.movieid=m.id) as m left join ratings as r on r.movieId=m.id "
-				+ "order by ? "
+				+ "order by "+sorted_by+" "
 				+ "limit ? "
 				+ "offset ?;";
 		preparedStatement=connection.prepareStatement(query);
@@ -86,40 +86,41 @@
 		preparedStatement.setString(2,"%"+title+"%");
 		preparedStatement.setString(3,"%"+year+"%");
 		preparedStatement.setString(4,"%"+director+"%" );
-		preparedStatement.setString(5,sorted_by);
-		preparedStatement.setInt(6,number_per_page);
-		preparedStatement.setInt(7,(start_from-1)*number_per_page);
+		//preparedStatement.setString(5,sorted_by);
+		preparedStatement.setInt(5,number_per_page);
+		preparedStatement.setInt(6,(start_from-1)*number_per_page);
 		
 		
 	}else if(browse_type.equals("a")){
 		
 		query="select m.id from movies as m , ratings as r where m.title LIKE ? and r.movieId=m.id"
-				+ " order by ? "
+				+ " order by "+sorted_by+" "
 				+ "limit ? "
 				+ "offset ?;";
 				
 		preparedStatement=connection.prepareStatement(query);
 		preparedStatement.setString(1,title+"%");
-		preparedStatement.setString(2,sorted_by);
-		preparedStatement.setInt(3,number_per_page);
-		preparedStatement.setInt(4,(start_from-1)*number_per_page);
+		//preparedStatement.setString(2,sorted_by);
+		preparedStatement.setInt(2,number_per_page);
+		preparedStatement.setInt(3,(start_from-1)*number_per_page);
 		
 	}else if(browse_type.equals("g")){
 		query="select m.id ,m.title,g.name from movies as m, ratings as r, genres as g, genres_in_movies as gm "
 				+ "where g.name=? and g.id=gm.genreId and gm.movieId=m.id and m.id=r.movieId "
-				+ "order by ? "
+				+ "order by "+sorted_by+" "
 				+ "limit ? "
 				+ "offset ?;";
 		
 		preparedStatement=connection.prepareStatement(query);
 		preparedStatement.setString(1,browse_genre);
-		preparedStatement.setString(2,sorted_by);
-		preparedStatement.setInt(3,number_per_page);
-		preparedStatement.setInt(4,(start_from-1)*number_per_page);
+		//preparedStatement.setString(2,sorted_by);
+		preparedStatement.setInt(2,number_per_page);
+		preparedStatement.setInt(3,(start_from-1)*number_per_page);
 	}
 	
 	
 	ResultSet resultSet = preparedStatement.executeQuery();
+	System.out.println("preparedStatement is:"+preparedStatement);
 	//ResultSetMetaData metadata = resultSet.getMetaData();
 	
     HttpServletRequest httpRequest = (HttpServletRequest) request;
