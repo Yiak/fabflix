@@ -19,6 +19,7 @@ function handleLoginResult(resultDataString) {
         console.log("show error message");
         console.log(resultDataJson["message"]);
         jQuery("#login_error_message").text(resultDataJson["message"]);
+        grecaptcha.reset()
     }
 }
 

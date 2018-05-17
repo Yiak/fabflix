@@ -14,7 +14,7 @@
 	// create database connection
 	Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
 	// declare statement
-	Statement statement = connection.createStatement();
+	
 
 
 	String title=request.getParameter("title");
@@ -56,9 +56,9 @@
 	}
 	
 	String query="empty";
-	
+	PreparedStatement preparedStatement=connection.prepareStatement(query);
 	if(browse_type==null || browse_type.equals("")){
-		
+		/***
 		query="select m.id from movies as m, "
 				+ "(select distinct sm.movieId  from stars_in_movies as sm, stars as s "
 				+ "where s.name like \"%"+star_name+"%\" and s.id=sm.starId) as nm, ratings as r "
@@ -69,37 +69,58 @@
 				+ "order by "+sorted_by+" "
 				+ "limit "+number_per_page+" "
 				+ "offset "+(start_from-1)*number_per_page+";";
-		
-		/***		
+				***/
+				
 		query="select m.id from (select m.id,m.title from movies as m, "
 				+ "(select distinct sm.movieId  from stars_in_movies as sm, stars as s "
-				+ "where s.name like \"%"+star_name+"%\" and s.id=sm.starId) as nm "
-				+ "where m.title LIKE \"%"+title+"%\" "
-				+ "and m.year Like \"%"+year+"%\"  "
-				+ "and m.director Like \"%"+director+"%\"  "
+				+ "where s.name like ? and s.id=sm.starId) as nm "
+				+ "where m.title LIKE ? "
+				+ "and m.year Like ?  "
+				+ "and m.director Like ?  "
 				+ "and nm.movieid=m.id) as m left join ratings as r on r.movieId=m.id "
-				+ "order by "+sorted_by+" "
-				+ "limit "+number_per_page+" "
-				+ "offset "+(start_from-1)*number_per_page+";";
-		***/
+				+ "order by ? "
+				+ "limit ? "
+				+ "offset ?;";
+		preparedStatement=connection.prepareStatement(query);
+		preparedStatement.setString(1,"%"+star_name+"%");
+		preparedStatement.setString(2,"%"+title+"%");
+		preparedStatement.setString(3,"%"+year+"%");
+		preparedStatement.setString(4,"%"+director+"%" );
+		preparedStatement.setString(5,sorted_by);
+		preparedStatement.setInt(6,number_per_page);
+		preparedStatement.setInt(7,(start_from-1)*number_per_page);
+		
 		
 	}else if(browse_type.equals("a")){
 		
-		query="select m.id from movies as m , ratings as r where m.title LIKE \""+title+"%\" and r.movieId=m.id"
-				+ " order by "+sorted_by+" "
-				+ "limit "+number_per_page+" "
-				+ "offset "+(start_from-1)*number_per_page+";";
+		query="select m.id from movies as m , ratings as r where m.title LIKE ? and r.movieId=m.id"
+				+ " order by ? "
+				+ "limit ? "
+				+ "offset ?;";
+				
+		preparedStatement=connection.prepareStatement(query);
+		preparedStatement.setString(1,title+"%");
+		preparedStatement.setString(2,sorted_by);
+		preparedStatement.setInt(3,number_per_page);
+		preparedStatement.setInt(4,(start_from-1)*number_per_page);
+		
 	}else if(browse_type.equals("g")){
 		query="select m.id ,m.title,g.name from movies as m, ratings as r, genres as g, genres_in_movies as gm "
-				+ "where g.name=\""+browse_genre+"\" and g.id=gm.genreId and gm.movieId=m.id and m.id=r.movieId "
-				+ "order by "+sorted_by+" "
-				+ "limit "+number_per_page+" "
-				+ "offset "+(start_from-1)*number_per_page+";";
+				+ "where g.name=? and g.id=gm.genreId and gm.movieId=m.id and m.id=r.movieId "
+				+ "order by ? "
+				+ "limit ? "
+				+ "offset ?;";
+		
+		preparedStatement=connection.prepareStatement(query);
+		preparedStatement.setString(1,browse_genre);
+		preparedStatement.setString(2,sorted_by);
+		preparedStatement.setInt(3,number_per_page);
+		preparedStatement.setInt(4,(start_from-1)*number_per_page);
 	}
 	
 	
-	ResultSet resultSet = statement.executeQuery(query);
-	ResultSetMetaData metadata = resultSet.getMetaData();
+	ResultSet resultSet = preparedStatement.executeQuery();
+	//ResultSetMetaData metadata = resultSet.getMetaData();
 	
     HttpServletRequest httpRequest = (HttpServletRequest) request;
     HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -118,7 +139,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Fabflix</title><link rel='stylesheet' href='style.css'>
+<title>Fabflix</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+<link rel='stylesheet' href='style.css'>
 </head>
 <body>
 <%@ include file="header.html"%>

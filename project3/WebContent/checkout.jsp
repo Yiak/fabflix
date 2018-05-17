@@ -32,9 +32,16 @@ if(check==null){
 	String cardnumber = request.getParameter("cardnumber");
 	String expiredate = request.getParameter("expiredate");
 	
-	String query="select id from creditcards where firstName=\""+firstname+"\" and lastName=\""+lastname+"\" and id=\""+cardnumber+"\" and expiration=\""+expiredate+"\";";
+	String query="select id from creditcards where firstName=? and lastName=? and id=? and expiration=?;";
+	PreparedStatement preparedStatement =connection.prepareStatement(query);
+	
+	preparedStatement.setString(1,firstname );
+	preparedStatement.setString(2,lastname );
+	preparedStatement.setString(3,cardnumber);
+	preparedStatement.setString(4,expiredate );
+	
 	//System.out.println("The user email is: ");
-	ResultSet resultSet = statement.executeQuery(query);
+	ResultSet resultSet = preparedStatement.executeQuery();
 	
 	
 	
@@ -76,6 +83,7 @@ if(check==null){
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Checkout</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 <link rel='stylesheet' href='style.css'>
 </head>
 <body>

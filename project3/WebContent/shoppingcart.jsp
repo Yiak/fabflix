@@ -13,7 +13,6 @@ Class.forName("com.mysql.jdbc.Driver").newInstance();
 // create database connection
 Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
 // declare statement
-Statement statement = connection.createStatement();
 
 String user_id=(String)session.getAttribute("id");
 Map<String,Integer> previousItems = (Map<String,Integer>)session.getAttribute("previousItems");
@@ -51,6 +50,7 @@ if(movieId!=null){
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Shopping Cart</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 <link rel='stylesheet' href='style.css'>
 </head>
 <body>
@@ -68,8 +68,10 @@ for(String m_id:previousItems.keySet()){
 	if(quantity>0){
 	exist_item=1;
 	String movie_title="";
-	String movieQuery="select title from movies where id=\""+m_id+"\";";
-	ResultSet movieResult = statement.executeQuery(movieQuery);
+	String movieQuery="select title from movies where id=?;";
+	PreparedStatement preparedStatement = connection.prepareStatement(movieQuery);
+	preparedStatement.setString(1, m_id);
+	ResultSet movieResult = preparedStatement.executeQuery();
 	while(movieResult.next()){
 		movie_title=movieResult.getString("title");
 	}%>

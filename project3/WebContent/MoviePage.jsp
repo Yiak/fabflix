@@ -13,14 +13,16 @@
 	// create database connection
 	Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
 	// declare statement
-	Statement statement = connection.createStatement();
+	
 	String movieId=request.getParameter("movieId");
 	
 	System.out.println("Now movieId is:"+movieId);
 	
-	String movieQuery="select m.title,m.year,m.director from movies as m where m.id=\""+movieId+"\";";
+	String movieQuery="select m.title,m.year,m.director from movies as m where m.id=?;";
+	PreparedStatement moviesStatement=connection.prepareStatement(movieQuery);
+	moviesStatement.setString(1,movieId);
 	
-	ResultSet movieResult = statement.executeQuery(movieQuery);
+	ResultSet movieResult = moviesStatement.executeQuery();
 	String movie_title="";
 	String movie_year="";
 	String movie_director="";
@@ -31,8 +33,10 @@
 		movie_director=movieResult.getString("director");
 	}
 	
-	String ratingQuery="select r.rating from movies as m, ratings as r where m.id=r.movieId and m.id=\""+movieId+"\";";
-	ResultSet ratingResult = statement.executeQuery(ratingQuery);
+	String ratingQuery="select r.rating from movies as m, ratings as r where m.id=r.movieId and m.id=?;";
+	PreparedStatement ratingStatement=connection.prepareStatement(ratingQuery);
+	ratingStatement.setString(1,movieId);
+	ResultSet ratingResult = ratingStatement.executeQuery();
 	while(ratingResult.next()){
 		movie_rating=ratingResult.getString("rating");
 	}
@@ -40,15 +44,19 @@
 		movie_rating="null";
 	}
 	
-	String genresQuery="select g.name from genres as g, genres_in_movies as gm where gm.movieId=\""+movieId+"\" and gm.genreId=g.id;";
-	ResultSet genresResult = statement.executeQuery(genresQuery);
+	String genresQuery="select g.name from genres as g, genres_in_movies as gm where gm.movieId=? and gm.genreId=g.id;";
+	PreparedStatement genresStatement=connection.prepareStatement(genresQuery);
+	genresStatement.setString(1,movieId);
+	ResultSet genresResult = genresStatement.executeQuery();
 	ArrayList<String> genres = new ArrayList();
 	while(genresResult.next()){
 		genres.add(genresResult.getString("name"));	
 	}
 	
-	String starsQuery="select s.name from stars as s, stars_in_movies as sm where sm.movieId=\""+movieId+"\" and sm.starId=s.id;";
-	ResultSet starsResult = statement.executeQuery(starsQuery);
+	String starsQuery="select s.name from stars as s, stars_in_movies as sm where sm.movieId=? and sm.starId=s.id;";
+	PreparedStatement starsStatement=connection.prepareStatement(starsQuery);
+	starsStatement.setString(1, movieId);
+	ResultSet starsResult = starsStatement.executeQuery();
 	ArrayList<String> stars = new ArrayList();
 	while(starsResult.next()){
 		stars.add(starsResult.getString("name"));	
@@ -60,6 +68,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><%=movie_title %></title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 <link rel='stylesheet' href='style.css'>
 </head>
 <body>

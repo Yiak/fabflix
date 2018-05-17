@@ -15,15 +15,19 @@ Class.forName("com.mysql.jdbc.Driver").newInstance();
 // create database connection
 Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
 // declare statement
-Statement statement = connection.createStatement();
+
 
 String user_id=(String)session.getAttribute("id");
 Date date = new Date();
 SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy/MM/dd");
 
 String query="select s.id ,m.title from sales as s , movies as m "
-	+ "where s.saleDate=\""+dateFormat.format(date)+"\" and s.customerId=\""+user_id+"\" and s.movieId=m.id;";
-	ResultSet salesResult = statement.executeQuery(query);
+	+ "where s.saleDate=? and s.customerId=? and s.movieId=m.id;";
+	PreparedStatement preparedStatement =connection.prepareStatement(query);
+	preparedStatement.setString(1,dateFormat.format(date));
+	preparedStatement.setString(2,user_id);
+	
+	ResultSet salesResult = preparedStatement.executeQuery();
 %>  
     
     
@@ -34,6 +38,7 @@ String query="select s.id ,m.title from sales as s , movies as m "
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Congratulation</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 <link rel='stylesheet' href='style.css'>
 </head>
 <body>

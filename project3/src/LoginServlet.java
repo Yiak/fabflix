@@ -9,10 +9,11 @@ import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
+
+
+import org.jasypt.util.password.PasswordEncryptor;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 
 //
 @WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
@@ -24,41 +25,64 @@ public class LoginServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        
+    	PrintWriter out = response.getWriter();
 
     	response.setContentType("text/html");
-		
+    	String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
+
+    	
+    	 try {
+             RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+         } catch (Exception e) {
+             out.println("<html>");
+             out.println("<head><title>Error</title></head>");
+             out.println("<body>");
+             out.println("<p>recaptcha verification error</p>");
+             out.println("<p>" + e.getMessage() + "</p>");
+             out.println("</body>");
+             out.println("</html>");
+             
+             out.close();
+             return;
+         }
+    	
+    	
 		String loginUser = "mytestuser";
         String loginPasswd = "mypassword";
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
-        PrintWriter out = response.getWriter();
+        
         try {
 	        Class.forName("com.mysql.jdbc.Driver").newInstance();
 			
 			Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
 			
-			Statement statement = connection.createStatement();
+			
 			
 			String password=request.getParameter("password");
 			String user=request.getParameter("user_email");
 			
+			PasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
+			String query = "SELECT * from customers where email= ?;";
+			PreparedStatement preparedStatement =connection.prepareStatement(query);
 			
-			String query="select id, firstName, lastName from customers where email=\""+user+"\" and password=\""+password+"\";";
-			System.out.println("The user email is: "+user+" password is "+password);
-			ResultSet resultSet = statement.executeQuery(query);
-			
-			
-			
-			
+			preparedStatement.setString(1, user);
+			System.out.println("the query is: "+preparedStatement);
+			ResultSet rs = preparedStatement.executeQuery();
 			int user_id=-1;
-			if(resultSet.next()) {
-				user_id= (int) resultSet.getInt("id");
+			boolean success = false;
+			if (rs.next()) {
+			    // get the encrypted password from the database
+				String encryptedPassword = rs.getString("password");
+				user_id=rs.getInt("id");
+				// use the same encryptor to compare the user input password with encrypted password stored in DB
+				success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
 			}
 
-			System.out.println("The user_id is: "+user_id);
+			
 			
         
-			if (user_id==-1) {
+			if (!success) {
 				JsonObject responseJsonObject = new JsonObject();
 	            responseJsonObject.addProperty("status", "fail");
 	            responseJsonObject.addProperty("message", "email or password incorrect!");

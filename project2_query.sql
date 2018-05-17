@@ -24,16 +24,12 @@ select m.id ,m.title,g.name from movies as m, ratings as r, genres as g, genres_
 select s.id ,m.title from sales as s , movies as m where s.saleDate="2018/05/04" and s.customerId="961" and s.movieId=m.id;
 
 
+select m.id, m.title,r.rating from movies as m, (select distinct sm.movieId  from stars_in_movies as sm, stars as s where s.name like "%%" and s.id=sm.starId) as nm, ratings as r where m.title LIKE "%%"  and m.year Like "%%" and m.director Like "%%" and nm.movieid=m.id and r.movieId= m.id order by r.rating desc limit 20 offset 0;
 
 
 
 
-
-
-
-
-
-
+select m.id, m.title,r.rating from (select m.id,m.title from movies as m,  (select distinct sm.movieId  from stars_in_movies as sm, stars as s where s.name like "%%" and s.id=sm.starId) as nm where m.title LIKE "%%" and m.year Like "%%" and m.director Like "%%" and nm.movieid=m.id) as m left join ratings as r on r.movieId=m.id order by r.rating desc limit 20  offset 0;
 
 
 
