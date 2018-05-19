@@ -1,5 +1,4 @@
 USE moviedb;
-drop table employees;
 CREATE TABLE IF NOT EXISTS employees(
     email VARCHAR(50) NOT NULL,
     password VARCHAR(128) NOT NULL ,
