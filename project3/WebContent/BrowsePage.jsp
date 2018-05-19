@@ -97,8 +97,6 @@
 </div>
 <div>
 <h1>Browse by movie genre</h1>
-<a href="search.jsp?browse_genre=action&browse_type=g&start_from=1&number_per_page=20">
-<button>Action</button></a>
 
 <%
 for(String genre:genres){

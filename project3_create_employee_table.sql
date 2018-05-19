@@ -9,4 +9,3 @@ CREATE TABLE IF NOT EXISTS employees(
 
 INSERT INTO employees VALUES('classta@email.edu','f0CxC17nisnj/BBBpyM3i+j0v+k3sFk0iRyti/tnd0JuaYjIKmDOo8gWz1kOGbAA','TA CS122B');
 
-INSERT INTO stars(name) VALUES('yyklz');
