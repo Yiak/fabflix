@@ -144,6 +144,7 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 <link rel='stylesheet' href='style.css'>
 </head>
+
 <body>
 <%@ include file="header.html"%>
 <div>
@@ -183,20 +184,29 @@
 	System.out.println("Enter the resultSet");
 	String movieId = resultSet.getString("id");
 	System.out.println("Now movieId is:"+movieId);
-	String movieQuery="select m.title,m.year,m.director,r.rating from movies as m, ratings as r where m.id=\""+movieId+"\" and r.movieId=m.id;";
+	String movieQuery="select m.title,m.year,m.director from movies as m where m.id=\""+movieId+"\";";
 	Statement temp_statement = connection.createStatement();
 	
 	ResultSet movieResult = temp_statement.executeQuery(movieQuery);
 	String movie_title="";
 	String movie_year="";
 	String movie_director="";
-	String movie_rating="";
+	
 	while(movieResult.next()){
 		movie_title=movieResult.getString("title");
 		movie_year=movieResult.getString("year");
 		movie_director=movieResult.getString("director");
-		movie_rating=movieResult.getString("rating");
+		
 	}
+	
+	
+	String ratingQuery="select rating from ratings where movieId=\""+movieId+"\";";
+	ResultSet ratingResult = temp_statement.executeQuery(ratingQuery);
+	String movie_rating="null";
+	while(ratingResult.next()){
+		movie_rating=ratingResult.getString("rating");	
+	}
+	
 	
 	if(movie_title.equals("")){
 		continue;
@@ -238,6 +248,7 @@
 <% } %>
 </table>
 </div>
+<br />
 </body>
 
 

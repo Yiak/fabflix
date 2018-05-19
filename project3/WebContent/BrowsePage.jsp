@@ -1,3 +1,35 @@
+<%@page import="java.sql.*" %>
+<%@ page import ="java.util.ArrayList"%>
+<%@ page import ="java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%
+	HttpServletRequest httpRequest = (HttpServletRequest) request;
+	HttpServletResponse httpResponse = (HttpServletResponse) response;
+	
+
+	
+    String loginUser = "mytestuser";
+    String loginPasswd = "mypassword";
+    String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
+	
+    Class.forName("com.mysql.jdbc.Driver").newInstance();
+    Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+    
+    String Query="select * from genres;";
+	PreparedStatement genresStatement=connection.prepareStatement(Query);
+	
+	ResultSet rs = genresStatement.executeQuery();
+	ArrayList<String> genres = new ArrayList();
+	while(rs.next()){
+		genres.add(rs.getString("name"));	
+	}
+    
+    
+%>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -67,73 +99,15 @@
 <h1>Browse by movie genre</h1>
 <a href="search.jsp?browse_genre=action&browse_type=g&start_from=1&number_per_page=20">
 <button>Action</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Adult&browse_type=g&start_from=1&number_per_page=20">
-<button>Adult</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Adventure&browse_type=g&start_from=1&number_per_page=20">
-<button>Adventure</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Animation&browse_type=g&start_from=1&number_per_page=20">
-<button>Animation</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Biography&browse_type=g&start_from=1&number_per_page=20">
-<button>Biography</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Comedy&browse_type=g&start_from=1&number_per_page=20">
-<button>Comedy</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Crime&browse_type=g&start_from=1&number_per_page=20">
-<button>Crime</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Documentary&browse_type=g&start_from=1&number_per_page=20">
-<button>Documentary</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Drama&browse_type=g&start_from=1&number_per_page=20">
-<button>Drama</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Family&browse_type=g&start_from=1&number_per_page=20">
-<button>Family</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Fantasy&browse_type=g&start_from=1&number_per_page=20">
-<button>Fantasy</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=History&browse_type=g&start_from=1&number_per_page=20">
-<button>History</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Horror&browse_type=g&start_from=1&number_per_page=20">
-<button>Horror</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Music&browse_type=g&start_from=1&number_per_page=20">
-<button>Music</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Musical&browse_type=g&start_from=1&number_per_page=20">
-<button>Musical</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Mystery&browse_type=g&start_from=1&number_per_page=20">
-<button>Mystery</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Reality-TV&browse_type=g&start_from=1&number_per_page=20">
-<button>Reality-TV</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Romance&browse_type=g&start_from=1&number_per_page=20">
-<button>Romance</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Sci-Fi&browse_type=g&start_from=1&number_per_page=20">
-<button>Sci-Fi</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Sport&browse_type=g&start_from=1&number_per_page=20">
-<button>Sport</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Thriller&browse_type=g&start_from=1&number_per_page=20">
-<button>Thriller</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=War&browse_type=g&start_from=1&number_per_page=20">
-<button>War</button></a>
-<br /><br />
-<a href="search.jsp?browse_genre=Western&browse_type=g&start_from=1&number_per_page=20">
-<button>Western</button></a>
-<br />
+
+<%
+for(String genre:genres){
+	%>
+<a href="search.jsp?browse_genre=<%=genre %>&browse_type=g&start_from=1&number_per_page=20">
+<button><%=genre %></button></a>
+	<% 
+}
+%>
 
 </div>
 </body>

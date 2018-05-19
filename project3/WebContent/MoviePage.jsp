@@ -5,6 +5,11 @@
     pageEncoding="UTF-8"%>
     
 <%
+	HttpServletRequest httpRequest = (HttpServletRequest) request;
+	HttpServletResponse httpResponse = (HttpServletResponse) response;
+	
+
+	
     String loginUser = "mytestuser";
     String loginPasswd = "mypassword";
     String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
@@ -114,6 +119,20 @@
 <button>Add to the cart</button></a></td>
 </tr>
 </table>
+<%
+if (httpRequest.getSession().getAttribute("isEmployeeLogin") != null) {
+	%>
+<br />
+<table>
+<tr>
+	<td colspan="2" style="background:#ffc107"><a href="_dashboard.jsp?">
+	<button>Back to Dashboard</button></a></td>
+	
+</tr>	
+</table>
+	<% 
+    }  %>
+
 </div>
 </body>
 </html>
