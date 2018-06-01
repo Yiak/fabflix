@@ -1,0 +1,72 @@
+table, th, td
+  {
+  border: 1px solid white;
+  border-collapse: collapse;
+  background: pink;
+  padding:15px;
+  width:50%;
+  text-align:center;
+  font-family:Tahoma;
+  
+  
+  }
+  
+  td, th{
+  text-overflow:ellipsis;
+  word-break:keep-all; 
+  white-space:nowrap;
+  }  
+  
+button{
+    
+    font-family:Arial;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+ table{
+ box-shadow: 0 0 20px #000;
+ margin:0px auto;
+ 
+ }
+  
+ h1{
+ width:100%; 
+ display:block; 
+ line-height:1.5em; 
+ overflow:visible; 
+ font-size:22px; 
+ text-align:center;
+ 
+ text-shadow:#f3f3f3 1px 1px 20px, #b2b2b2 1px 2px 0
+ }
+
+ body{background: #D6E9FC}
+ 
+ a{
+    font-family:Arial;
+    font-size:.8em;
+    text-align:center;
+    margin:3px;
+}
+a:link,a:visited{
+    color:#A62020;
+    padding:4px 10px;　
+    
+}
+a:hover{
+    color:#773575;
+    padding:5px 8px 3px 12px;　　
+
+}
+
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; } 
