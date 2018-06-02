@@ -48,8 +48,11 @@ public class LoginFilter implements Filter {
                 ||requestURI.endsWith("_dashboard.jsp") 
                 ||requestURI.endsWith("insertStar.jsp") 
                 ||requestURI.endsWith("emlpoyeeLogin.js") 
+                ||requestURI.endsWith("/api/android_search") 
                 || requestURI.endsWith("api/login")
+                || requestURI.endsWith("api/android_login")
                 || requestURI.endsWith("api/employee_login");
+        
     }
 
     /**
