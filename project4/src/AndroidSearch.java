@@ -58,19 +58,13 @@ public class AndroidSearch extends HttpServlet
               System.out.println("user input " + input);
  
             
-              String query="select m.id from (select m.id,m.title from movies as m, "
-      				+ "(select distinct sm.movieId  from stars_in_movies as sm, stars as s "
-      				+ "where s.name like ? and s.id=sm.starId) as nm "
-      				+ "where m.title LIKE ? "
-      				+ "and nm.movieid=m.id) as m left join ratings as r on r.movieId=m.id "
-      				+ "limit ? "
-      				+ "offset ?;";
+              String query="select id, title, year,director from movies where title like ?";
               
               PreparedStatement preparedStatement=connection.prepareStatement(query);
-              preparedStatement.setString(1,"%"+star_name+"%");
+              preparedStatement.setString(1,"%"+input+"%");
               
               // Perform the query
-              ResultSet rs = pstmt.executeQuery();
+              ResultSet rs = preparedStatement.executeQuery();
               //ResultSet rs = statement.executeQuery(query);
 
              
@@ -79,13 +73,41 @@ public class AndroidSearch extends HttpServlet
               JsonArray jsonArray = new JsonArray();
               while (rs.next())
               {
-            	  	  String movie_id = rs.getString(1);
+            	  
+            	  String movie_id = rs.getString(1);
                   String movie_title = rs.getString(2);
                   int movie_year = rs.getInt(3);
                   String movie_director = rs.getString(4);
-                  String star_name = rs.getString(5);
-                  String genre_type = rs.getString(6);
-                  double rating = rs.getDouble(7);
+                
+                  
+                  System.out.println(movie_id);
+                  
+                  
+                  Statement temp_statement = connection.createStatement(); 
+                  String genresQuery="select g.name from genres as g, genres_in_movies as gm where gm.movieId=\""+movie_id+"\" and gm.genreId=g.id;";
+              		ResultSet genresResult = temp_statement.executeQuery(genresQuery);
+              		String genre_type = "";
+              		while(genresResult.next()){
+              			genre_type+=genresResult.getString("name");	
+              		}
+              	
+              		String starsQuery="select s.name from stars as s, stars_in_movies as sm where sm.movieId=\""+movie_id+"\" and sm.starId=s.id;";
+              		ResultSet starsResult = temp_statement.executeQuery(starsQuery);
+              		String star_name = "";
+              		while(starsResult.next()){
+              			star_name+=starsResult.getString("name");	
+              		}
+                  
+                  
+              		String ratingQuery="select rating from ratings where movieId=\""+movie_id+"\";";
+              		
+              		ResultSet ratingResult = temp_statement.executeQuery(ratingQuery);
+              		String rating="null";
+              		while(ratingResult.next()){
+              			rating=ratingResult.getString("rating");	
+              		}
+              		
+              		
                   
 //                  System.out.print(movie_id);
 //                  System.out.print(movie_title);
@@ -106,13 +128,14 @@ public class AndroidSearch extends HttpServlet
                   jsonObject.addProperty("rating", rating);
                   
                   jsonArray.add(jsonObject);
+                  temp_statement.close();
                   
                   
               }
-              out.write(jsonArray.toString());
+              response.getWriter().write(jsonArray.toString());
               System.out.println(" after json");
               rs.close();
-              statement.close();
+              preparedStatement.close();
               connection.close();
              
               

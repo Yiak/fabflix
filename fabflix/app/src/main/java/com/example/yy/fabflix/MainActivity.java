@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         final Context context = this;
-        String url = "https://52.14.246.47:8443/project4/api/android_search?search=" + title;
+        final String url = "https://52.14.246.47:8443/project4/api/android_search?search=" + title;
 
 
         StringRequest postRequest = new StringRequest(Request.Method.GET, url,
@@ -53,22 +53,14 @@ public class MainActivity extends AppCompatActivity {
 
                         //{"status":"success","message":"success"}
                         Log.d("response", response);
+
                         Intent goToIntent = new Intent(context, ResultActivity.class);
+                        Log.d("check", url);
 
                         goToIntent.putExtra("message", response);
 
                         startActivity(goToIntent);
 
-//                        try {
-//                            JSONObject jObject = new JSONObject(response);
-//                            if (jObject.getString("status").equals("success")) {
-//                                //change to main page
-//                                Log.d("response", "in json if loop");
-//                            }
-//                        }
-//                        catch (JSONException e) {
-//                            Log.e("MYAPP", "unexpected JSON exception", e);}
-//
                     }
                 },
                 new Response.ErrorListener() {

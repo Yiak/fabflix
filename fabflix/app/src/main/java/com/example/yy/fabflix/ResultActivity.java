@@ -5,10 +5,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,7 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.util.Log;
 
-public class ResultActivity extends AppCompatActivity {
+public class ResultActivity extends AppCompatActivity  {
 
     private ListView listview;
     private TextView title;
@@ -81,7 +84,7 @@ public class ResultActivity extends AppCompatActivity {
             String movie_director = content.getString("movie_director");
             String star_name = content.getString("star_name");
             String genre_type = content.getString("genre_type");
-            double rating = content.getDouble("rating");
+            String rating = content.getString("rating");
             total += "ID: "+movie_id+"\n";
             total+= "Title: "+movie_title+"\n";
             total+= "Year: "+movie_year+"\n";
@@ -98,11 +101,11 @@ public class ResultActivity extends AppCompatActivity {
         }
         catch (JSONException e)
         {
-            Log.e("MYAPP", "unexpected JSON exception", e);
+            Log.e("MYAPP", "result unexpected JSON exception", e);
         }
 
 
-
+        final Context context = this;
         listview = (ListView)findViewById(R.id.list);
         btn_prev = (Button)findViewById(R.id.prev);
         btn_next = (Button)findViewById(R.id.next);
@@ -151,6 +154,16 @@ public class ResultActivity extends AppCompatActivity {
                 increment--;
                 loadList(increment);
                 CheckEnable();
+            }
+        });
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent goToIntent=new Intent(context,ItemActivity.class);
+                goToIntent.putExtra("message",data.get(increment*NUM_ITEMS_PAGE+position));//传递给下一个Activity的值
+                startActivity(goToIntent);//启动Activity
             }
         });
 
@@ -205,4 +218,8 @@ public class ResultActivity extends AppCompatActivity {
                 sort);
         listview.setAdapter(sd);
     }
+
+
+
+
 }

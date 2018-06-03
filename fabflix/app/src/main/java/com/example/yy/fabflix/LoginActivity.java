@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity{
                             }
                         }
                         catch (JSONException e) {
-                            Log.e("MYAPP", "unexpected JSON exception", e);}
+                            Log.e("MYAPP", "login unexpected JSON exception", e);}
 
                     }
                 },
