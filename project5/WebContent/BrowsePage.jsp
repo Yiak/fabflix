@@ -1,6 +1,9 @@
 <%@page import="java.sql.*" %>
 <%@ page import ="java.util.ArrayList"%>
 <%@ page import ="java.util.List"%>
+<%@page import="javax.naming.Context" %>
+<%@page import="javax.naming.InitialContext" %>
+<%@page import="javax.sql.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
@@ -9,13 +12,25 @@
 	HttpServletResponse httpResponse = (HttpServletResponse) response;
 	
 
+
+    Context initCtx = new InitialContext();
+    Context envCtx = (Context) initCtx.lookup("java:comp/env");
+    if (envCtx == null)
+        out.println("envCtx is NULL");
+
+    // Look up our data source
+    DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+
+
+    if (ds == null)
+        out.println("ds is null.");
+
+    Connection connection = ds.getConnection();
+    if (connection == null)
+        out.println("dbcon is null.");
 	
-    String loginUser = "mytestuser";
-    String loginPasswd = "mypassword";
-    String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
 	
-    Class.forName("com.mysql.jdbc.Driver").newInstance();
-    Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+	
     
     String Query="select * from genres;";
 	PreparedStatement genresStatement=connection.prepareStatement(Query);

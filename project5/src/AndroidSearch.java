@@ -14,6 +14,7 @@ import javax.naming.InitialContext;
 import javax.naming.Context;
 import javax.sql.DataSource;
 
+
 @WebServlet(name = "AndroidSearch", urlPatterns = "/api/android_search")
 
 
@@ -32,11 +33,7 @@ public class AndroidSearch extends HttpServlet
         throws IOException, ServletException
     {
       
-		String loginUser = "mytestuser";
-        String loginPasswd = "mypassword";
-        String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
-
-        response.setContentType("application/json");    // Response mime type
+		
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
@@ -45,12 +42,21 @@ public class AndroidSearch extends HttpServlet
 
         try
            {
-        	Class.forName("com.mysql.jdbc.Driver").newInstance();
-			
-			Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
-			
+        	Context initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+            if (envCtx == null)
+                out.println("envCtx is NULL");
 
-            
+            // Look up our data source
+            DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+
+
+            if (ds == null)
+                out.println("ds is null.");
+
+            Connection connection = ds.getConnection();
+            if (connection == null)
+                out.println("dbcon is null.");
               // Declare our statement
               
 

@@ -6,6 +6,9 @@
 <%@page import="java.sql.*" %>
 <%@page import="java.util.Date" %>
 <%@page import="java.text.SimpleDateFormat" %>
+<%@page import="javax.naming.Context" %>
+<%@page import="javax.naming.InitialContext" %>
+<%@page import="javax.sql.*" %>
 
 <%
 String loginUser = "mytestuser";

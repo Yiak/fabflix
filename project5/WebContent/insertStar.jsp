@@ -4,7 +4,9 @@
 <%@ page import ="java.util.List"%> 
 <%@ page import ="java.util.*"%>   
 <%@page import="java.sql.*" %>
-
+<%@page import="javax.naming.Context" %>
+<%@page import="javax.naming.InitialContext" %>
+<%@page import="javax.sql.*" %>
 
 <%
 String loginUser = "mytestuser";

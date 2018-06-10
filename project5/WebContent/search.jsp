@@ -3,7 +3,9 @@
 <%@ page import ="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@page import="javax.naming.Context" %>
+<%@page import="javax.naming.InitialContext" %>
+<%@page import="javax.sql.*" %>
 <%-- these statements are just normal Java code, they need to be inside the <% %> brackets--%>
 <%
     String loginUser = "mytestuser";

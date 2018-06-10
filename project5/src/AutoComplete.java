@@ -1,5 +1,6 @@
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.*;
@@ -13,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
+import javax.sql.DataSource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 @WebServlet("/autocomplete")
 public class AutoComplete extends HttpServlet {
@@ -26,52 +29,8 @@ public class AutoComplete extends HttpServlet {
 	
 
 	
-	public static HashMap<Integer, String> marvelHerosMap = new HashMap<>();
-	public static HashMap<Integer, String> dcHerosMap = new HashMap<>();
-	String a;
-	static {
-		marvelHerosMap.put(1, "Blade");
-		marvelHerosMap.put(2, "Ghost Rider");
-		marvelHerosMap.put(3, "Luke Cage");
-		marvelHerosMap.put(4, "Silver Surfer");
-		marvelHerosMap.put(5, "Beast");
-		marvelHerosMap.put(6, "Thing");
-		marvelHerosMap.put(7, "Black Panther");
-		marvelHerosMap.put(8, "Invisible Woman");
-		marvelHerosMap.put(9, "Nick Fury");
-		marvelHerosMap.put(10, "Storm");
-		marvelHerosMap.put(11, "Iron Man");
-		marvelHerosMap.put(12, "Professor X");
-		marvelHerosMap.put(13, "Hulk");
-		marvelHerosMap.put(14, "Cyclops");
-		marvelHerosMap.put(15, "Thor");
-		marvelHerosMap.put(16, "Jean Grey");
-		marvelHerosMap.put(17, "Wolverine");
-		marvelHerosMap.put(18, "Daredevil");
-		marvelHerosMap.put(19, "Captain America");
-		marvelHerosMap.put(20, "Spider-Man");
-	}
 	
-	static {
-		dcHerosMap.put(101, "Superman");
-		dcHerosMap.put(102, "Batman");
-		dcHerosMap.put(103, "Wonder Woman");
-		dcHerosMap.put(104, "Flash");
-		dcHerosMap.put(105, "Green Lantern");
-		dcHerosMap.put(106, "Catwoman");
-		dcHerosMap.put(107, "Nightwing");
-		dcHerosMap.put(108, "Captain Marvel");
-		dcHerosMap.put(109, "Aquaman");
-		dcHerosMap.put(110, "Green Arrow");
-		dcHerosMap.put(111, "Martian Manhunter");
-		dcHerosMap.put(112, "Batgirl");
-		dcHerosMap.put(113, "Supergirl");
-		dcHerosMap.put(114, "Black Canary");
-		dcHerosMap.put(115, "Hawkgirl");
-		dcHerosMap.put(116, "Cyborg");
-		dcHerosMap.put(117, "Robin");
-	}
-    
+	
     public AutoComplete() {
         super();
     }
@@ -97,18 +56,26 @@ public class AutoComplete extends HttpServlet {
      * 
      */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		 PrintWriter out = response.getWriter();
 
-		String loginUser = "mytestuser";
-	    String loginPasswd = "mypassword";
-	    String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
-		
 		
 		try {
 			
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			
-			Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+			Context initCtx = new InitialContext();
+		    Context envCtx = (Context) initCtx.lookup("java:comp/env");
+		    if (envCtx == null)
+		        out.println("envCtx is NULL");
+
+		    // Look up our data source
+		    DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+
+
+		    if (ds == null)
+		        out.println("ds is null.");
+
+		    Connection connection = ds.getConnection();
+		    if (connection == null)
+		        out.println("dbcon is null.");
 			
 			
 			// setup the response json arrray

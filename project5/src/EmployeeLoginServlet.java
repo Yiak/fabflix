@@ -14,7 +14,9 @@ import java.sql.*;
 
 import org.jasypt.util.password.PasswordEncryptor;
 import org.jasypt.util.password.StrongPasswordEncryptor;
-
+import javax.sql.DataSource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 //
 @WebServlet(name = "EmployeeLoginServlet", urlPatterns = "/api/employee_login")
 public class EmployeeLoginServlet extends HttpServlet {
@@ -48,15 +50,23 @@ public class EmployeeLoginServlet extends HttpServlet {
          }
     	
     	
-		String loginUser = "mytestuser";
-        String loginPasswd = "mypassword";
-        String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
         
         try {
-	        Class.forName("com.mysql.jdbc.Driver").newInstance();
-			
-			Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
-			
+        	Context initCtx = new InitialContext();
+		    Context envCtx = (Context) initCtx.lookup("java:comp/env");
+		    if (envCtx == null)
+		        out.println("envCtx is NULL");
+
+		    // Look up our data source
+		    DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+
+
+		    if (ds == null)
+		        out.println("ds is null.");
+
+		    Connection connection = ds.getConnection();
+		    if (connection == null)
+		        out.println("dbcon is null.");
 			
 			
 			String password=request.getParameter("password");

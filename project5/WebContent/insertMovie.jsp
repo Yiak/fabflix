@@ -4,7 +4,9 @@
 <%@ page import ="java.util.ArrayList"%>
 <%@ page import ="java.util.List"%>
 <%@ page import ="java.util.*"%> 
-
+<%@page import="javax.naming.Context" %>
+<%@page import="javax.naming.InitialContext" %>
+<%@page import="javax.sql.*" %>
 <%
 	HttpServletRequest httpRequest = (HttpServletRequest) request;
 	HttpServletResponse httpResponse = (HttpServletResponse) response;
