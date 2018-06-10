@@ -14,14 +14,22 @@
 		System.out.println("check here");
 	    httpResponse.sendRedirect("_dashboard.html");
 	    } 
-	String loginUser = "mytestuser";
-	String loginPasswd = "mypassword";
-	String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
-	
-	Class.forName("com.mysql.jdbc.Driver").newInstance();
-	// create database connection
-	Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
-	
+	Context initCtx = new InitialContext();
+    Context envCtx = (Context) initCtx.lookup("java:comp/env");
+    if (envCtx == null)
+        out.println("envCtx is NULL");
+
+    // Look up our data source
+    DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+
+
+    if (ds == null)
+        out.println("ds is null.");
+
+    Connection connection = ds.getConnection();
+    if (connection == null)
+        out.println("dbcon is null.");
+    
 	String movie_name=request.getParameter("name");
 	String movie_director=request.getParameter("director");
 	String movie_year=request.getParameter("year");
