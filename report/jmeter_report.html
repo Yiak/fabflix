@@ -1,0 +1,114 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+    background-color: linen;
+}
+
+td {
+    border-top-style: solid;
+}
+</style>
+</head>
+<body>
+
+<table style="width:100%">
+  <tr style="font-weight:bold; background-color: orange">
+    <td width="300px">Single-instance version cases</td>
+    <td>Graph Results Screenshot</td>
+    <td>Average Query Time(ms)</td>
+    <td>Average Search Servlet Time(ms)</td>
+    <td>Average JDBC Time(ms)</td>
+    <td>Analysis</td>
+  </tr>
+  <tr>
+    <td>Case 1: HTTP/1 thread</td>
+    <td><img src="graph_results_case1.png" alt="Graph Results Screenshot Case 1" style="width:304px;height:228px;"></td>
+    <td>194</td>
+    <td>195.70</td>
+    <td>189.15</td>
+    <td>Everything works perfect. Instance 1 takes all the jobs.</td>
+  </tr>
+  <tr>
+    <td>Case 2: HTTP/10 threads</td>
+    <td><img src="graph_results_case2.png" alt="Graph Results Screenshot Case 2" style="width:304px;height:228px;"></td>
+    <td>196</td>
+    <td>193.24</td>
+    <td>186.77</td>
+    <td>It should be slower than the multiple instances since there is only one instance to do all the queries. 10 threads make it be a little bit slower.</td>
+  </tr>
+  <tr>
+    <td>Case 3: HTTPS/10 threads</td>
+    <td><img src="graph_results_case3.png" alt="Graph Results Screenshot Case 3" style="width:304px;height:228px;"></td>
+    <td>208</td>
+    <td>192.40</td>
+    <td>185.96</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Case 4: HTTP/10 threads/No prepared statements</td>
+    <td><img src="graph_results_case4.png" alt="Graph Results Screenshot Case 4" style="width:304px;height:228px;"></td>
+    <td>203</td>
+    <td>293.76</td>
+    <td>187.33</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Case 5: HTTP/10 threads/No connection pooling</td>
+    <td><img src="graph_results_case5.png" alt="Graph Results Screenshot Case 4" style="width:304px;height:228px;"></td>
+    <td>??</td>
+    <td>??</td>
+    <td>??</td>
+    <td></td>
+  </tr>
+
+</table> 
+
+
+<table style="width:100%">
+  <tr style="font-weight:bold; background-color: orange">
+    <td width="300px">Scaled version cases</td>
+    <td>Graph Results Screenshot</td>
+    <td>Average Query Time(ms)</td>
+    <td>Average Search Servlet Time(ms)</td>
+    <td>Average JDBC Time(ms)</td>
+    <td>Analysis</td>
+  </tr>
+  <tr>
+    <td>Case 1: HTTP/1 thread</td>
+    <td><img src="graph_results_case6.png" alt="Graph Results Screenshot Case 1" style="width:304px;height:228px;"></td>
+    <td>162</td>
+    <td>6.29</td>
+    <td>5.94</td>
+    <td>It should be a little bit faster than 10 threads because it takes less queries at the same time, the load is lighter than 10 threads, which gives it a better performance.</td>
+  </tr>
+  <tr>
+    <td>Case 2: HTTP/10 threads</td>
+    <td><img src="graph_results_case7.png" alt="Graph Results Screenshot Case 2" style="width:304px;height:228px;"></td>
+    <td>175</td>
+    <td>28.22</td>
+    <td>26.57</td>
+    <td>Comparing to single server, since the master and slave instances both do their jobs, the performence is a little bit better than single server.</td>
+  </tr>
+  <tr>
+    <td>Case 3: HTTP/10 threads/No prepared statements</td>
+    <td><img src="graph_results_case8.png" alt="Graph Results Screenshot Case 4" style="width:304px;height:228px;"></td>
+    <td>191</td>
+    <td>28.53</td>
+    <td>26.94</td>
+    <td>The result of prepared statements in our case is kind of limited, so removing it does not change a lot in the performance.</td>
+  </tr>
+  <tr>
+    <td>Case 4: HTTP/10 threads/No connection pooling</td>
+    <td><img src="graph_results_case9.png" alt="Graph Results Screenshot Case 4" style="width:304px;height:228px;"></td>
+    <td>195</td>
+    <td>29.40</td>
+    <td>25.69</td>
+    <td>Removing connection polling makes the difference between TS and TJ becomes larger.</td>
+  </tr>
+
+</table> 
+
+</body>
+</html>
