@@ -30,7 +30,7 @@ public class LoginFilter implements Filter {
 
         // Redirect to login page if the "user" attribute doesn't exist in session
         if ((httpRequest.getSession().getAttribute("isLogin") == null)&&(httpRequest.getSession().getAttribute("isEmployeeLogin") == null)) {
-            httpResponse.sendRedirect("login.html");
+            httpResponse.sendRedirect("/project5/login.html");
         } else {
             chain.doFilter(request, response);
         }
@@ -49,6 +49,7 @@ public class LoginFilter implements Filter {
                 ||requestURI.endsWith("_dashboard.html") 
                 ||requestURI.endsWith("_dashboard.jsp") 
                 ||requestURI.endsWith("insertStar.jsp") 
+                || requestURI.endsWith("search.jsp")
                 ||requestURI.endsWith("emlpoyeeLogin.js") 
                 ||requestURI.endsWith("/api/android_search") 
                 || requestURI.endsWith("api/login")

@@ -6,8 +6,16 @@
 <%@page import="javax.naming.Context" %>
 <%@page import="javax.naming.InitialContext" %>
 <%@page import="javax.sql.*" %>
+
+<%@ page import ="java.io.*"%>
+<%@ page import ="java.net.*"%>
+<%@ page import ="java.text.*"%>
+
 <%-- these statements are just normal Java code, they need to be inside the <% %> brackets--%>
 <%
+long TS = 0;
+long TJ = 0;
+long TSstartTime = System.nanoTime();
 Context initCtx = new InitialContext();
 Context envCtx = (Context) initCtx.lookup("java:comp/env");
 if (envCtx == null)
@@ -16,6 +24,8 @@ if (envCtx == null)
 // Look up our data source
 DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
 
+String TJtext = "/home/ubuntu/time/TJ.txt";
+String TStext = "/home/ubuntu/time/TS.txt";
 
 if (ds == null)
     out.println("ds is null.");
@@ -64,6 +74,10 @@ if (connection == null)
 	}
 	
 	String query="empty";
+	
+	
+	long TJstartTime = System.nanoTime();
+	
 	PreparedStatement preparedStatement=connection.prepareStatement(query);
 	if(browse_type==null || browse_type.equals("")){
 		/***
@@ -129,7 +143,11 @@ if (connection == null)
 	
 	ResultSet resultSet = preparedStatement.executeQuery();
 	System.out.println("preparedStatement is:"+preparedStatement);
+	
 	//ResultSetMetaData metadata = resultSet.getMetaData();
+	long TJendTime = System.nanoTime();
+	
+	TJ = TJendTime - TJstartTime;
 	
     HttpServletRequest httpRequest = (HttpServletRequest) request;
     HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -253,7 +271,34 @@ if (connection == null)
 <a href="shoppingcart.jsp?movieId=<%=movieId %>&q=233">
 <button>Add to the cart</button></a></td>
 </tr>
-<% } %>
+<% 
+temp_statement.close();
+}
+preparedStatement.close();
+long TSendTime = System.nanoTime();
+TS = TSendTime - TSstartTime;
+try {
+		
+	FileOutputStream write1 = new FileOutputStream(TJtext , true);
+	
+	PrintStream print1 = new PrintStream(write1);
+	
+	FileOutputStream write2 = new FileOutputStream(TStext, true);
+	
+	PrintStream print2 = new PrintStream(write2);
+	 
+	print1.println(TJ);
+	print2.println(TS);
+	print1.close();
+	print2.close();
+
+	 
+	 
+ }catch (Exception e) {
+	 System.out.println(e);
+ }
+connection.close();
+ %>
 </table>
 </div>
 <br />

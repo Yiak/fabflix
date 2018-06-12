@@ -15,7 +15,7 @@ if (envCtx == null)
     out.println("envCtx is NULL");
 
 // Look up our data source
-DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+DataSource ds = (DataSource) envCtx.lookup("jdbc/InsertDB");
 
 
 if (ds == null)
