@@ -44,23 +44,23 @@ td {
     <td>208</td>
     <td>192.40</td>
     <td>185.96</td>
-    <td></td>
+    <td>Https takes extra steps, but it does not seem to be effect a lot in out test.</td>
   </tr>
   <tr>
     <td>Case 4: HTTP/10 threads/No prepared statements</td>
     <td><img src="graph_results_case4.png" alt="Graph Results Screenshot Case 4" style="width:304px;height:228px;"></td>
     <td>203</td>
-    <td>293.76</td>
+    <td>193.76</td>
     <td>187.33</td>
-    <td></td>
+    <td>prepared statements is not really useful here since the number of queries is bery small, so there is not much difference.</td>
   </tr>
   <tr>
     <td>Case 5: HTTP/10 threads/No connection pooling</td>
     <td><img src="graph_results_case5.png" alt="Graph Results Screenshot Case 4" style="width:304px;height:228px;"></td>
-    <td>??</td>
-    <td>??</td>
-    <td>??</td>
-    <td></td>
+    <td>212</td>
+    <td>196.75</td>
+    <td>190.05</td>
+    <td>Connection polling makes the difference of TS and TJ becomes larger.</td>
   </tr>
 
 </table> 
