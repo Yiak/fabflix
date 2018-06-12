@@ -54,10 +54,10 @@ local.properties
 .worksheet
 
 ### Eclipse Patch ###
-# Eclipse Core		
+# Eclipse Core
 .project
 
-# JDT-specific (Eclipse Java Development Tools)		
+# JDT-specific (Eclipse Java Development Tools)
 .classpath
 
 ### Intellij ###
@@ -140,7 +140,7 @@ fabric.properties
 
 # Package Files #
 *.jar
-*.war
+
 *.ear
 *.zip
 *.tar.gz
@@ -168,4 +168,3 @@ buildNumber.properties
 
 
 # End of https://www.gitignore.io/api/java,maven,eclipse,java-web,intellij
-
